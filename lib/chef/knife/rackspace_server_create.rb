@@ -218,7 +218,7 @@ class Chef
         :long => "--rackspace_config_drive CONFIGDRIVE",
         :description => "Creates a config drive device in /dev/disk/by-label/config-2 if set to TRUE",
         :proc => Proc.new { |k| Chef::Config[:knife][:rackspace_config_drive] = k },
-        :default => "false"
+        :default => false
 
       option :rackspace_user_data_file,
         :long => "--rackspace_user_data_file USERDATA",
@@ -362,7 +362,7 @@ class Chef
           :metadata => Chef::Config[:knife][:rackspace_metadata],
           :disk_config => Chef::Config[:knife][:rackspace_disk_config],
           :user_data => user_data,
-          :config_drive => locate_config_value(:rackspace_config_drive) || false,
+          :config_drive => locate_config_value(:rackspace_config_drive),
           :personality => files,
           :key_name => Chef::Config[:knife][:rackspace_ssh_keypair]
         )
