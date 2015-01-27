@@ -357,9 +357,9 @@ class Chef
 
         server = connection.servers.new(
           :name => node_name,
-          :image_id => Chef::Config[:knife][:image],
+          :image_id => locate_config_value(:image),
           :flavor_id => locate_config_value(:flavor),
-          :metadata => Chef::Config[:knife][:rackspace_metadata],
+          :metadata => locate_config_value(:rackspace_metadata),
           :disk_config => Chef::Config[:knife][:rackspace_disk_config],
           :user_data => user_data,
           :config_drive => locate_config_value(:rackspace_config_drive),
@@ -460,11 +460,11 @@ class Chef
         msg_pair("Environment", config[:environment] || '_default')
         msg_pair("Run List", config[:run_list].join(', '))
       end
-      
+
       def user_data
-        file = Chef::Config[:knife][:rackspace_user_data]
+        file = locate_config_value(:rackspace_user_data)
         return unless file
-        
+
         begin
           filename = File.expand_path(file)
           content = File.read(filename)
@@ -480,7 +480,7 @@ class Chef
         bootstrap.name_args = [bootstrap_ip_address]
         bootstrap.config[:ssh_user] = config[:ssh_user] || "root"
         bootstrap.config[:ssh_password] = server.password
-        bootstrap.config[:ssh_port] = config[:ssh_port] || Chef::Config[:knife][:ssh_port]
+        bootstrap.config[:ssh_port] = locate_config_value(:ssh_port)
         bootstrap.config[:identity_file] = config[:identity_file]
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
         # bootstrap will run as root...sudo (by default) also messes up Ohai on CentOS boxes
